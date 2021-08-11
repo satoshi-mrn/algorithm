@@ -4,14 +4,12 @@ import java.util.Scanner;
 
 class FullSearch {
   public static void main(String[] args) {
-    // System.out.println((3 >> 0) & 1);
-    // System.out.println(1 << 9);
-    solutionABC045C();
+    solutionARC061C();
   }
 
   // Practice: ARC 061 C
   // see: https://atcoder.jp/contests/arc061/tasks/arc061_a
-  private static void solutionABC045C() {
+  private static void solutionARC061C() {
     Scanner sc = new Scanner(System.in);
     char[] S = sc.next().toCharArray();
     long ans = 0;
