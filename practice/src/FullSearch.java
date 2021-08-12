@@ -8,10 +8,11 @@ class FullSearch {
   public static void main(String[] args) {
     // solutionARC061C();
     // solutionABC079C();
-    solutionABC104C();
+    // solutionABC104C();
+    solutionARC029C();
   }
 
-  // Practice: ARC 061 C
+  // Practice: ARC061 C
   // see: https://atcoder.jp/contests/arc061/tasks/arc061_a
   private static void solutionARC061C() {
     Scanner sc = new Scanner(System.in);
@@ -34,7 +35,7 @@ class FullSearch {
     sc.close();
   }
 
-  // Practice: ABC 079 C
+  // Practice: ABC079 C
   // see: https://atcoder.jp/contests/abc079/tasks/abc079_c
   private static void solutionABC079C() {
     Scanner sc = new Scanner(System.in);
@@ -64,8 +65,8 @@ class FullSearch {
     }
   }
 
-  // Practice: ABC 104 C
-  // see: https://atcoder.jp/contests/abc079/tasks/abc079_c
+  // Practice: ABC104 C
+  // see: https://atcoder.jp/contests/abc104/tasks/abc104_c
   private static void solutionABC104C() {
     Scanner sc = new Scanner(System.in);
     int D = sc.nextInt();
@@ -111,6 +112,34 @@ class FullSearch {
         }
       }
       ans = Math.min(count, ans);
+    }
+    System.out.println(ans);
+  }
+
+  // Practice: ARC029 C
+  // see: https://atcoder.jp/contests/arc029/tasks/arc029_1
+  private static void solutionARC029C() {
+    Scanner sc = new Scanner(System.in);
+    int N = sc.nextInt();
+    int[] t = new int[N];
+    for (int i = 0; i < t.length; i++) {
+      t[i] = sc.nextInt();
+    }
+    sc.close();
+
+    int ans = Integer.MAX_VALUE;
+    for (int i = 0; i < (1 << t.length); i++) {
+      int a = 0;
+      int b = 0;
+      for (int j = 0; j < t.length; j++) {
+        if (((i >> j) & 1) != 0) {
+          a += t[j];
+        } else {
+          b += t[j];
+        }
+      }
+      int max = Math.max(a, b);
+      ans = Math.min(ans, max);
     }
     System.out.println(ans);
   }
