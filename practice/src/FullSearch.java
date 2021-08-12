@@ -1,11 +1,14 @@
 package practice.src;
 
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 class FullSearch {
   public static void main(String[] args) {
-    solutionARC061C();
+    // solutionARC061C();
     // solutionABC079C();
+    solutionABC104C();
   }
 
   // Practice: ARC 061 C
@@ -59,5 +62,56 @@ class FullSearch {
         return;
       }
     }
+  }
+
+  // Practice: ABC 104 C
+  // see: https://atcoder.jp/contests/abc079/tasks/abc079_c
+  private static void solutionABC104C() {
+    Scanner sc = new Scanner(System.in);
+    int D = sc.nextInt();
+    int G = sc.nextInt();
+    int[] p = new int[D];
+    int[] c = new int[D];
+    for (int i = 0; i < D; i++) {
+      p[i] = sc.nextInt();
+      c[i] = sc.nextInt();
+    }
+    sc.close();
+
+    int ans = Integer.MAX_VALUE;
+    for (int i = 0; i < (1 << D); i++) {
+      Set<Integer> set = new HashSet<>();
+      int count = 0;
+      int sum = 0;
+      for (int j = 0; j < D; j++) {
+        if (((i >> j) & 1) != 0) {
+          set.add(j);
+          sum += c[j] + (p[j] * (100 * (j + 1)));
+          count += p[j];
+        }
+      }
+      for (int j = c.length - 1; j >= 0 && sum < G; j--) {
+        if (set.contains(j)) {
+          continue;
+        }
+
+        int score = 100 * (j + 1);
+        int remain = G - sum;
+        int nc = remain / score;
+        if (remain % score != 0) {
+          nc += 1;
+        }
+
+        if (nc > p[j]) {
+          count += p[j];
+          sum += (score * p[j]) + c[j];
+        } else {
+          count += nc;
+          sum += (score * nc);
+        }
+      }
+      ans = Math.min(count, ans);
+    }
+    System.out.println(ans);
   }
 }
