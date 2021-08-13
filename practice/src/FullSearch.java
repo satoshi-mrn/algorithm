@@ -11,6 +11,8 @@ class FullSearch {
     // solutionABC104C();
     // solutionARC029C();
     // solutionABC002D();
+    // solutionATC001A();
+    solutionARC031B();
   }
 
   // Practice: ARC061 C
@@ -187,5 +189,101 @@ class FullSearch {
       }
     }
     System.out.println(ans);
+  }
+
+  // Practice: ATC001 A
+  // see: https://atcoder.jp/contests/atc001/tasks/dfs_a
+  private static void solutionATC001A() {
+    Scanner sc = new Scanner(System.in);
+    int H = sc.nextInt();
+    int W = sc.nextInt();
+    char[][] c = new char[H][W];
+    int sh = -1;
+    int sw = -1;
+    int gh = -1;
+    int gw = -1;
+    for (int i = 0; i < H; i++) {
+      c[i] = sc.next().toCharArray();
+    }
+    sc.close();
+    for (int i = 0; i < H; i++) {
+      for (int j = 0; j < W; j++) {
+        if (c[i][j] == 's') {
+          sh = i;
+          sw = j;
+        }
+        if (c[i][j] == 'g') {
+          gh = i;
+          gw = j;
+        }
+      }
+    }
+    boolean[][] memo = new boolean[H][W];
+    dfsForSolutionATC001A(memo, c, sh, sw);
+    System.out.println(memo[gh][gw] ? "Yes" : "No");
+  }
+
+  private static void dfsForSolutionATC001A(boolean[][] memo, char[][] c, int h, int w) {
+    if (h < 0 || h > c.length - 1 || w < 0 || w > c[0].length - 1 || memo[h][w] || c[h][w] == '#') {
+      return;
+    }
+    memo[h][w] = true;
+    dfsForsolutionATC001A(memo, c, h - 1, w);
+    dfsForsolutionATC001A(memo, c, h + 1, w);
+    dfsForsolutionATC001A(memo, c, h, w - 1);
+    dfsForsolutionATC001A(memo, c, h, w + 1);
+  }
+
+  // Practice: ARC031 B
+  // see: https://atcoder.jp/contests/arc031/tasks/arc031_2
+  private static void solutionARC031B() {
+    Scanner sc = new Scanner(System.in);
+    char[][] A = new char[10][10];
+    for (int i = 0; i < 10; i++) {
+      A[i] = sc.next().toCharArray();
+    }
+    sc.close();
+
+    int expected = 1;
+    for (int i = 0; i < A.length; i++) {
+      for (int j = 0; j < A.length; j++) {
+        if (A[i][j] == 'o') {
+          expected++;
+        }
+      }
+    }
+
+    for (int i = 0; i < 10; i++) {
+      for (int j = 0; j < 10; j++) {
+        if (A[i][j] == 'o') {
+          continue;
+        }
+
+        boolean[][] memo = new boolean[10][10];
+        int sum = dfsForSolutionARC031B(memo, A, i, j, true);
+        if (sum == expected) {
+          System.out.println("YES");
+          return;
+        }
+      }
+    }
+    System.out.println("NO");
+  }
+
+  private static int dfsForSolutionARC031B(boolean[][] memo, char[][] c, int h, int w, boolean s) {
+    if (h < 0 || h > c.length - 1 || w < 0 || w > c[0].length - 1 || memo[h][w]) {
+      return 0;
+    }
+    if ((!s) && c[h][w] == 'x') {
+      return 0;
+    }
+
+    int count = 1;
+    memo[h][w] = true;
+    count += dfsForSolutionARC031B(memo, c, h - 1, w, false);
+    count += dfsForSolutionARC031B(memo, c, h + 1, w, false);
+    count += dfsForSolutionARC031B(memo, c, h, w - 1, false);
+    count += dfsForSolutionARC031B(memo, c, h, w + 1, false);
+    return count;
   }
 }
