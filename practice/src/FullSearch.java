@@ -9,7 +9,8 @@ class FullSearch {
     // solutionARC061C();
     // solutionABC079C();
     // solutionABC104C();
-    solutionARC029C();
+    // solutionARC029C();
+    // solutionABC002D();
   }
 
   // Practice: ARC061 C
@@ -140,6 +141,50 @@ class FullSearch {
       }
       int max = Math.max(a, b);
       ans = Math.min(ans, max);
+    }
+    System.out.println(ans);
+  }
+
+  // Practice: ABC002 D
+  // see: https://atcoder.jp/contests/abc002/tasks/abc002_4
+  private static void solutionABC002D() {
+    Scanner sc = new Scanner(System.in);
+    int N = sc.nextInt();
+    int M = sc.nextInt();
+    long[] xy = new long[N];
+    for (int i = 0; i < N; i++) {
+      xy[i] |= (1 << i);
+    }
+    for (int i = 0; i < M; i++) {
+      int x = sc.nextInt() - 1;
+      int y = sc.nextInt() - 1;
+      xy[x] |= (1 << y);
+      xy[y] |= (1 << x);
+    }
+    sc.close();
+
+    int ans = 0;
+    for (int i = 0; i < (1 << N); i++) {
+      Set<Integer> set = new HashSet<>();
+      for (int j = 0; j < N; j++) {
+        if (((i >> j) & 1) != 0) {
+          set.add(j);
+        }
+      }
+
+      boolean ok = true;
+      for (int j = 0; j < N && set.size() > 0; j++) {
+        if (!set.contains(j)) {
+          continue;
+        }
+        if ((i & xy[j]) != i) {
+          ok = false;
+          break;
+        }
+      }
+      if (ok) {
+        ans = Math.max(ans, set.size());
+      }
     }
     System.out.println(ans);
   }
