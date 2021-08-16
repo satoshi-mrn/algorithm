@@ -1,6 +1,8 @@
 package practice.src;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -12,7 +14,9 @@ class FullSearch {
     // solutionARC029C();
     // solutionABC002D();
     // solutionATC001A();
-    solutionARC031B();
+    // solutionARC031B();
+    // solutionARC037B();
+    solutionAOJ1160();
   }
 
   // Practice: ARC061 C
@@ -228,10 +232,10 @@ class FullSearch {
       return;
     }
     memo[h][w] = true;
-    dfsForsolutionATC001A(memo, c, h - 1, w);
-    dfsForsolutionATC001A(memo, c, h + 1, w);
-    dfsForsolutionATC001A(memo, c, h, w - 1);
-    dfsForsolutionATC001A(memo, c, h, w + 1);
+    dfsForSolutionATC001A(memo, c, h - 1, w);
+    dfsForSolutionATC001A(memo, c, h + 1, w);
+    dfsForSolutionATC001A(memo, c, h, w - 1);
+    dfsForSolutionATC001A(memo, c, h, w + 1);
   }
 
   // Practice: ARC031 B
@@ -285,5 +289,89 @@ class FullSearch {
     count += dfsForSolutionARC031B(memo, c, h, w - 1, false);
     count += dfsForSolutionARC031B(memo, c, h, w + 1, false);
     return count;
+  }
+
+  // Practice: ARC037 B
+  // see: https://atcoder.jp/contests/arc037/tasks/arc037_b
+  private static void solutionARC037B() {
+    Scanner sc = new Scanner(System.in);
+    int N = sc.nextInt();
+    int M = sc.nextInt();
+    List<ArrayList<Integer>> graph = new ArrayList<>();
+    for (int i = 0; i < N; i++) {
+      graph.add(new ArrayList<Integer>());
+    }
+    for (int i = 0; i < M; i++) {
+      int u = sc.nextInt() - 1;
+      int v = sc.nextInt() - 1;
+      graph.get(u).add(v);
+      graph.get(v).add(u);
+    }
+    sc.close();
+
+    boolean[] seen = new boolean[N];
+    int ans = 0;
+    for (int i = 0; i < seen.length; i++) {
+      if (seen[i]) continue;
+      boolean hasCycle = dfsForSolutionARC037B(graph, seen, -1, i, false);
+      if (!hasCycle) ans++;
+    }
+    System.out.println(ans);
+  }
+
+  private static boolean dfsForSolutionARC037B(
+      List<ArrayList<Integer>> graph, boolean[] seen, int parent, int v, boolean hasCycle) {
+    seen[v] = true;
+    for (Integer nextV : graph.get(v)) {
+      if (nextV == parent) continue;
+      if (seen[nextV]) return true;
+      hasCycle = dfsForSolutionARC037B(graph, seen, v, nextV, hasCycle);
+    }
+    return hasCycle;
+  }
+
+  // Practice: AOJ1160
+  // see: https://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=1160&lang=jp
+  private static void solutionAOJ1160() {
+    Scanner sc = new Scanner(System.in);
+    while (true) {
+      int w = sc.nextInt();
+      int h = sc.nextInt();
+      if (w == 0 && h == 0) break;
+
+      int[][] c = new int[h][w];
+      for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+          c[i][j] = sc.nextInt();
+        }
+      }
+      boolean[][] seen = new boolean[h][w];
+      int count = 0;
+      for (int i = 0; i < seen.length; i++) {
+        for (int j = 0; j < seen[0].length; j++) {
+          if (c[i][j] == 0) continue;
+          if (seen[i][j]) continue;
+          dfsForSolutionAOJ1160(c, seen, i, j);
+          count++;
+        }
+      }
+      System.out.println(count);
+    }
+    sc.close();
+  }
+
+  private static void dfsForSolutionAOJ1160(int[][] c, boolean[][] seen, int h, int w) {
+    if (h < 0 || h > c.length - 1 || w < 0 || w > c[0].length - 1) return;
+    if (seen[h][w]) return;
+    if (c[h][w] == 0) return;
+    seen[h][w] = true;
+    dfsForSolutionAOJ1160(c, seen, h - 1, w);
+    dfsForSolutionAOJ1160(c, seen, h + 1, w);
+    dfsForSolutionAOJ1160(c, seen, h, w - 1);
+    dfsForSolutionAOJ1160(c, seen, h, w + 1);
+    dfsForSolutionAOJ1160(c, seen, h + 1, w + 1);
+    dfsForSolutionAOJ1160(c, seen, h - 1, w - 1);
+    dfsForSolutionAOJ1160(c, seen, h + 1, w - 1);
+    dfsForSolutionAOJ1160(c, seen, h - 1, w + 1);
   }
 }
